@@ -100,6 +100,21 @@ type Pokemon = {
     }>;
 }
 
+type PokemonDetails = {
+    sprites: {
+        front_default: string,
+        front_shiny: string,
+        front_female: string,
+        front_shiny_female: string,
+        back_default: string,
+        back_shiny: string,
+        back_female: string,
+        back_shiny_female: string,
+    },
+    weight: string,
+    height: string
+}
+
 type ApiResponse = {
     data: { pokemon_entries: PokemonResult[] }
 }
@@ -114,5 +129,6 @@ export type {
     Pokemon,
     PokemonResult,
     ApiResponse,
-    getStaticProps
+    getStaticProps,
+    PokemonDetails
 }

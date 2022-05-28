@@ -1,36 +1,36 @@
-import Link from "next/link";
-import axios from "axios";
+import utilStyles from "./index.module.css";
 
-import styles from "./index.module.css";
-import type { PokemonResult } from "../type";
-import Image from 'next/image'
+import Head from "next/head";
+
+import { getPostData } from "../lib/markdown";
+
 
 export async function getStaticProps() {
-  const { data } = await axios.get("https://pokeapi.co/api/v2/pokedex/1/");
+    const postData = await getPostData("home");
 
-  return {
-    props: {
-      cards: data.pokemon_entries
-    }
-  };
+    return {
+        props: {
+            postData
+        }
+    };
 }
 
-export default function Home({ cards }: { cards: PokemonResult[] }) {
-  return (
-    <div className={styles.root}>
-      {cards.map(({ entry_number }) => (
-        <div key={entry_number} className={styles.card}>
-          <Link href={`/pokemon_entries/${entry_number}`}>
-            <a>
-              <Image src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry_number}.png`}
-                alt=""
-                height={150}
-                width={150}
-              />
-            </a>
-          </Link>
-        </div>
-      ))}
-    </div>
-  );
+export default function Post({ postData }: { postData: { id: string, contentHtml: string, title: string, date: string } }) {
+    return (
+        <>
+            <Head>
+                <title>{postData.title}</title>
+            </Head>
+
+            <article>
+                <h1 className={utilStyles.headingXl}>{postData.title}</h1>
+                <div className={utilStyles.lightText}>
+                    <p>
+                        {postData.date}
+                    </p>
+                </div>
+                <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+            </article>
+        </>
+    );
 }
