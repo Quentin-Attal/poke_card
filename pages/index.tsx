@@ -15,20 +15,15 @@ export async function getStaticProps() {
     };
 }
 
-export default function Post({ postData }: { postData: { id: string, contentHtml: string, title: string, date: string } }) {
+export default function Post({ postData }: { postData: { id: string, contentHtml: string, title: string, titleHeader: string } }) {
     return (
         <>
             <Head>
-                <title>{postData.title}</title>
+                <title>{postData.titleHeader}</title>
             </Head>
 
             <article>
                 <h1 className={utilStyles.headingXl}>{postData.title}</h1>
-                <div className={utilStyles.lightText}>
-                    <p>
-                        {postData.date}
-                    </p>
-                </div>
                 <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
             </article>
         </>
