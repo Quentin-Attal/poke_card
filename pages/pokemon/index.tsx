@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import Link from "next/link";
 import axios from "axios";
-import { Pagination } from "@mui/material";
+import { Pagination, Skeleton } from "@mui/material";
 
 import styles from "../index.module.css";
 import type { PokemonResult } from "../../type";
@@ -21,40 +21,70 @@ export async function getStaticProps() {
 
 export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [pokemonPaginate, setPokemonPaginate] = useState<PokemonResult[]>([]);
+
   const router = useRouter();
+  const rowSkeletons = Array.from({ length: 30 }, (_, i) => i);
 
   const handlePaginationChange = (e: ChangeEvent<unknown>, value: number) => {
     router.push(`?page=${value}`, undefined, { shallow: true });
   };
 
   useEffect(() => {
-    if (pokemon) {
+    if (pokemon && page > 0) {
       setPokemonPaginate(pokemon.slice((page - 1) * 30, page * 30));
+      setLoading(false);
     }
   }, [pokemon, page]);
 
   useEffect(() => {
     if (router.query.page && page !== Number(router.query.page) && pokemon) {
       setPage(parseInt(router.query.page as string));
-      setPokemonPaginate(pokemon.slice((page - 1) * 30, page * 30));
+    } else if (router.isReady && !router.query.page && pokemon) {
+      setPage(1);
     }
   }, [router.query.page, page, pokemon]);
 
+  if (loading) {
+    return <div className={styles.root}>
+      {rowSkeletons.map((item, index) => (
+        <div key={"preload" + index} className={styles.card}>
+          <div className={styles.inside_card}>
+            <div className={styles.inside_card}>
+              <Skeleton variant="rectangular" width={"100%"} height={"100%"} />
+            </div>
+            <Skeleton variant="text" width={"100%"} height={"20%"} />
+          </div>
+        </div>
+      ))}
+      <Pagination
+        count={30}
+        variant="outlined"
+        shape="rounded"
+        color="primary"
+        className={styles.pagination}
+        onChange={handlePaginationChange}
+        page={page}
+      />
+    </div>
+  }
 
   return (
     <div className={styles.root}>
       {pokemonPaginate.map(({ entry_number, pokemon_species }) => (
         <div key={entry_number} className={styles.card}>
           <Link href={`/pokemon_entries/${entry_number}`}>
-            <a>
-              <Image src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry_number}.png`}
-                alt={pokemon_species.name}
-                height={150}
-                loading={"lazy"}
-                width={150}
-              />
+            <a className={styles.inside_card}>
+              <div className={styles.inside_card}>
+                <Image src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry_number}.png`}
+                  alt={pokemon_species.name}
+                  width={"100%"}
+                  height={"100%"}
+                  loading={"lazy"}
+                />
+              </div>
               <p>{pokemon_species.name}</p>
             </a>
           </Link>
