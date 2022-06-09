@@ -125,10 +125,17 @@ type getStaticProps = {
     }
 }
 
+type HeaderHome = {
+    search: string,
+    setSearch: (value: string) => void,
+    handleSearchSubmit: () => void
+}
+
 export type {
     Pokemon,
     PokemonResult,
     ApiResponse,
     getStaticProps,
-    PokemonDetails
+    PokemonDetails,
+    HeaderHome
 }

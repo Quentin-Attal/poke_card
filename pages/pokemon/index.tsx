@@ -9,6 +9,7 @@ import { Pagination, Skeleton } from "@mui/material";
 import styles from "../pokemon.module.css";
 import type { PokemonResult } from "../../type";
 import Head from "next/head";
+import HeaderPageHome from "../../components/headerHome";
 
 export async function getStaticProps() {
   const { data } = await axios.get("https://pokeapi.co/api/v2/pokedex/1/");
@@ -24,6 +25,8 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
 
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState<string>("");
+  const [pokemonList, setPokemonList] = useState<PokemonResult[]>(pokemon);
   const [pokemonPaginate, setPokemonPaginate] = useState<PokemonResult[]>([]);
 
   const router = useRouter();
@@ -34,25 +37,52 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
   };
 
   useEffect(() => {
-    if (pokemon && page > 0) {
-      setPokemonPaginate(pokemon.slice((page - 1) * 30, page * 30));
+    if (pokemonList && page > 0) {
+      setPokemonPaginate(pokemonList.slice((page - 1) * 30, page * 30));
       setLoading(false);
     }
-  }, [pokemon, page]);
+  }, [pokemonList, page]);
 
   useEffect(() => {
-    if (router.query.page && page !== Number(router.query.page) && pokemon) {
+    if (router.query.page && page !== Number(router.query.page) && pokemonList) {
       setPage(parseInt(router.query.page as string));
-    } else if (router.isReady && !router.query.page && pokemon) {
+    } else if (router.isReady && !router.query.page && pokemonList) {
       setPage(1);
     }
-  }, [router.query.page, page, pokemon]);
+  }, [router.query.page, page, pokemonList]);
+
+  const handleSearchSubmit = () => {
+    if (search.length > 0) {
+      //check if search is not a number
+      if (isNaN(Number(search))) {
+        const searchPokemon = pokemon.filter(res => res.pokemon_species.name.toLowerCase().includes(search.toLowerCase()));
+        setPokemonList(searchPokemon);
+        setPokemonPaginate(searchPokemon.slice(0, 30));
+      } else {
+        //if search is a number we get the pokemon by id
+        const searchPokemon = pokemon.filter(res => res.entry_number.toString() == search);
+        setPokemonList(searchPokemon);
+        setPokemonPaginate(searchPokemon.slice(0, 30));
+      }
+    } else {
+      setPokemonList(pokemon);
+      setPokemonPaginate(pokemon.slice(0, 30));
+
+    }
+    setPage(1);
+  }
+
 
   if (loading) {
     return <div className={styles.root}>
       <Head>
         <title>Pokedex</title>
       </Head>
+      <HeaderPageHome
+        search={search}
+        setSearch={setSearch}
+        handleSearchSubmit={handleSearchSubmit}
+      />
       {rowSkeletons.map((item, index) => (
         <div key={"preload" + index} className={styles.card}>
           <div className={styles.inside_card}>
@@ -80,7 +110,12 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
       <Head>
         <title>Pokedex</title>
       </Head>
-      {pokemonPaginate.map(({ entry_number, pokemon_species }) => (
+      <HeaderPageHome
+        search={search}
+        setSearch={setSearch}
+        handleSearchSubmit={handleSearchSubmit}
+      />
+      {pokemonPaginate.length > 0 ? pokemonPaginate.map(({ entry_number, pokemon_species }) => (
         <div key={entry_number} className={styles.card}>
           <Link href={`/pokemon_entries/${entry_number}`}>
             <a className={styles.inside_card}>
@@ -96,9 +131,15 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
             </a>
           </Link>
         </div>
-      ))}
+      )) :
+        <h3 style={{
+          textAlign: "center",
+          marginTop: "20px",
+          marginBottom: "20px",
+          gridColumn: "1 / -1"
+        }}>No results</h3>}
       <Pagination
-        count={Math.floor(pokemon.length / 30) + 1}
+        count={Math.floor(pokemonList.length / 30) + 1}
         variant="outlined"
         shape="rounded"
         color="primary"
