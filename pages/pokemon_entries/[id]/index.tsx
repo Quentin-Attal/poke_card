@@ -1,4 +1,5 @@
 import axios from "axios";
+import Head from "next/head";
 import Image from "next/image";
 
 import type { ApiResponse, getStaticProps, Pokemon, PokemonDetails } from "../../../type";
@@ -45,6 +46,9 @@ export default function Card({ pokemonDetails, pokemon }: { pokemonDetails: Poke
 
     return (
         <div>
+            <Head>
+                <title>{pokemonDetails.name}</title>
+            </Head>
             <h2>{pokemonDetails.names.find(res => res.language.name === language)?.name}</h2>
             <div>
                 {pokemon.sprites.front_default && <Image height={200} width={200} src={pokemon.sprites.front_default} alt="" />}

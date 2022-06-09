@@ -6,8 +6,9 @@ import Link from "next/link";
 import axios from "axios";
 import { Pagination, Skeleton } from "@mui/material";
 
-import styles from "../index.module.css";
+import styles from "../pokemon.module.css";
 import type { PokemonResult } from "../../type";
+import Head from "next/head";
 
 export async function getStaticProps() {
   const { data } = await axios.get("https://pokeapi.co/api/v2/pokedex/1/");
@@ -49,6 +50,9 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
 
   if (loading) {
     return <div className={styles.root}>
+      <Head>
+        <title>Pokedex</title>
+      </Head>
       {rowSkeletons.map((item, index) => (
         <div key={"preload" + index} className={styles.card}>
           <div className={styles.inside_card}>
@@ -73,6 +77,9 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
 
   return (
     <div className={styles.root}>
+      <Head>
+        <title>Pokedex</title>
+      </Head>
       {pokemonPaginate.map(({ entry_number, pokemon_species }) => (
         <div key={entry_number} className={styles.card}>
           <Link href={`/pokemon_entries/${entry_number}`}>

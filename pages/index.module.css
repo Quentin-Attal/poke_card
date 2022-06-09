@@ -1,52 +1,43 @@
-.root {
-    display: grid;
-    width: 100%;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 1rem;
+.title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #d1092b;
+    font-weight: bold;
+}
+
+.markDown {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.markDown h2 {
+    font-size: 2rem;
+    margin: 1rem;
+    margin-left: 0;
+    font-weight: 500;
+}
+
+.markDown h3 {
+    font-size: 1.75rem;
+    margin: 1rem;
+    margin-left: 0;
+    font-weight: 400;
+}
+
+.markDown p {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.markDown a {
+    padding: 1rem;
+    border-radius: 5px;
+    background-color: #d1092b;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    display: flex;
     align-items: center;
-}
-
-.pagination {
-    display: flex;
+    margin-top: 1rem;
     justify-content: center;
-    grid-column: 1 / -1;
-    margin: 1rem 0;
-}
-
-.card {
-    margin: 10px;
-    width: 200px;
-    height: 200px;
-    position: relative;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    text-align: center;
-    display: flex;
-}
-
-.inside_card {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 10px;
-    position: relative;
-}
-
-@media screen and (max-width: 600px) {
-    .card {
-        width: 200px;
-        height: 200px;
-    }
-
-    .root {
-        display: grid;
-        width: 100%;
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: 1rem;
-        align-items: center;
-    }
 }
