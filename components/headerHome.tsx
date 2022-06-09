@@ -2,6 +2,7 @@ import { IconButton, InputBase, Paper } from "@mui/material";
 import { Search as SearchIcon } from '@mui/icons-material';
 import Image from "next/image";
 import type { HeaderHome } from "../type";
+import Link from "next/link";
 
 const HeaderPageHome = ({ search, setSearch, handleSearchSubmit }: HeaderHome) => <div style={{
     display: "flex",
@@ -11,12 +12,16 @@ const HeaderPageHome = ({ search, setSearch, handleSearchSubmit }: HeaderHome) =
     marginBottom: "20px",
     gridColumn: "1 / -1",
 }}>
-    <Image
-        priority
-        src="/images/rotom.jpg"
-        height={108}
-        width={300}
-    />
+    <Link href="/">
+        <a>
+            <Image
+                priority
+                src="/images/rotom.jpg"
+                height={108}
+                width={300}
+            />
+        </a>
+    </Link>
     <Paper
         component="form"
         sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
