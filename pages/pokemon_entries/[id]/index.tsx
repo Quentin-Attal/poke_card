@@ -1,8 +1,10 @@
 import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import type { ApiResponse, getStaticProps, Pokemon, PokemonDetails } from "../../../type";
+import { pokemonDetailsInit } from "../../../components/constants";
 
 export async function getStaticPaths() {
     const { data }: ApiResponse = await axios.get(
@@ -23,38 +25,51 @@ async function getPokemonData(url: string): Promise<Pokemon | PokemonDetails> {
 export async function getStaticProps({ params }: getStaticProps) {
     const { id } = params;
 
-    let url = `https://pokeapi.co/api/v2/pokemon-species/${id}`;
-
-    const pokemonDetails = await getPokemonData(url);
-
-    url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+    const url = `https://pokeapi.co/api/v2/pokemon-species/${id}`;
 
     const pokemon = await getPokemonData(url);
 
     return {
         props: {
-            pokemonDetails: pokemonDetails,
+            id: id,
             pokemon: pokemon
         }
     };
 }
 
-export default function Card({ pokemonDetails, pokemon }: { pokemonDetails: Pokemon, pokemon: PokemonDetails }) {
+export default function Card({ id, pokemon }: { id: number, pokemon: Pokemon }) {
 
     const language = "en";
-    const flavor_text = pokemonDetails.flavor_text_entries.filter(res => res.language.name === language);
+
+    const [PokemonDetails, setPokemonDetails] = useState<PokemonDetails>(pokemonDetailsInit);
+
+    const flavor_text = pokemon.flavor_text_entries.filter(res => res.language.name === language);
+
+    useEffect(() => {
+        if (id) {
+            const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+
+            const pokemonDetail = getPokemonData(url);
+
+            Promise.all([pokemonDetail]).then(([pokemonDetail]) => {
+                if ("sprites" in pokemonDetail) {
+                    setPokemonDetails(pokemonDetail);
+                }
+            });
+        }
+    }, [id]);
 
     return (
         <div>
             <Head>
-                <title>{pokemonDetails.name}</title>
+                <title>{pokemon.name}</title>
             </Head>
-            <h2>{pokemonDetails.names.find(res => res.language.name === language)?.name}</h2>
+            <h2>{pokemon.names.find(res => res.language.name === language)?.name}</h2>
             <div>
-                {pokemon.sprites.front_default && <Image height={200} width={200} src={pokemon.sprites.front_default} alt="" />}
-                {pokemon.sprites.front_female && <Image height={200} width={200} src={pokemon.sprites.front_female} alt="" />}
-                {pokemon.sprites.front_shiny && <Image height={200} width={200} src={pokemon.sprites.front_shiny} alt="" />}
-                {pokemon.sprites.front_shiny_female && <Image height={200} width={200} src={pokemon.sprites.front_shiny_female} alt="" />}
+                <Image height={200} width={200} alt={pokemon.name} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`} />
+                {PokemonDetails.sprites.front_female && <Image height={200} width={200} src={PokemonDetails.sprites.front_female} alt="" />}
+                <Image height={200} width={200} alt={pokemon.name + " shiny"} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`} />
+                {PokemonDetails.sprites.front_shiny_female && <Image height={200} width={200} src={PokemonDetails.sprites.front_shiny_female} alt="" />}
             </div>
             {flavor_text.map((res, index) => (<div key={"flavor_" + index}>
                 <h3>{res.version.name}</h3>
@@ -62,14 +77,14 @@ export default function Card({ pokemonDetails, pokemon }: { pokemonDetails: Poke
             </div>)
             )}
             <p>
-                {pokemonDetails.evolves_from_species ? pokemonDetails.evolves_from_species.name : "No Evolution"}
+                {pokemon.evolves_from_species ? pokemon.evolves_from_species.name : "No Evolution"}
             </p>
             <h2>
-                Species: {pokemonDetails.genera.find(res => res.language.name === language)?.genus}
+                Species: {pokemon.genera.find(res => res.language.name === language)?.genus}
             </h2>
             <p>
-                weight: {pokemon.weight}
-                height: {pokemon.height}
+                weight: {PokemonDetails.weight}
+                height: {PokemonDetails.height}
             </p>
         </div>
     );

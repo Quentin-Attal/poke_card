@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
 import { Pagination, Skeleton } from "@mui/material";
+import { motion } from "framer-motion"
 
 import styles from "../pokemon.module.css";
 import type { PokemonResult } from "../../type";
@@ -70,6 +71,7 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
 
     }
     setPage(1);
+    router.push(`?page=1`, undefined, { shallow: true });
   }
 
 
@@ -119,14 +121,24 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
         <div key={entry_number} className={styles.card}>
           <Link href={`/pokemon_entries/${entry_number}`}>
             <a className={styles.inside_card}>
-              <div className={styles.inside_card}>
+              <motion.div
+                animate={{
+                  scale: [0.1, 1, 1],
+                  filter: ["grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8)", "grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8)", ""]
+                }}
+                transition={{
+                  duration: 1,
+                  ease: "easeInOut",
+                  times: [0.1, 0.8, 1],
+                }}
+                className={styles.inside_card}>
                 <Image src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry_number}.png`}
                   alt={pokemon_species.name}
                   width={"100%"}
                   height={"100%"}
                   loading={"lazy"}
                 />
-              </div>
+              </motion.div>
               <p>{pokemon_species.name}</p>
             </a>
           </Link>
