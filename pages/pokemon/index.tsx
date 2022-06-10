@@ -49,7 +49,7 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
     } else if (router.isReady && !router.query.page && pokemonList) {
       setPage(1);
     }
-  }, [router.query.page, page, pokemonList]);
+  }, [router.query.page, router.isReady, page, pokemonList]);
 
   const handleSearchSubmit = () => {
     if (search.length > 0) {

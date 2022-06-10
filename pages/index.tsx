@@ -1,7 +1,5 @@
 import utilStyles from "./index.module.css";
 
-import Head from "next/head";
-
 import { getPostData } from "../lib/markdown";
 import Header from "../components/header";
 

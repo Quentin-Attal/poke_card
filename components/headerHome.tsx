@@ -19,6 +19,7 @@ const HeaderPageHome = ({ search, setSearch, handleSearchSubmit }: HeaderHome) =
                 src="/images/rotom.jpg"
                 height={108}
                 width={300}
+                alt="Rotom"
             />
         </a>
     </Link>
