@@ -36,7 +36,11 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
   const rowSkeletons = Array.from({ length: 30 }, (_, i) => i);
 
   const handlePaginationChange = (e: ChangeEvent<unknown>, value: number) => {
-    router.push(`?page=${value}`, undefined, { shallow: true });
+    if (search.length > 0) {
+      router.push(`?search=${search}&page=${value}`, undefined, { shallow: true });
+    } else {
+      router.push(`?page=${value}`, undefined, { shallow: true });
+    }
   };
 
   useEffect(() => {
@@ -53,12 +57,31 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
   }, [pokemonList, page]);
 
   useEffect(() => {
-    if (router.query.page && page !== Number(router.query.page) && pokemonList) {
-      setPage(parseInt(router.query.page as string));
-    } else if (router.isReady && !router.query.page && pokemonList) {
-      setPage(1);
+    if (router.isReady && pokemonList) {
+      if (router.query.page && page !== Number(router.query.page)) {
+        setPage(parseInt(router.query.page as string));
+      } else if (!router.query.page) {
+        setPage(1);
+      }
+      if (router.query.search && search !== router.query.search) {
+        //check if search is not a number
+        const newSearch = router.query.search as string;
+        if (isNaN(Number(newSearch))) {
+          const searchPokemon = pokemon.filter(res => res.pokemon_species.name.toLowerCase().includes(newSearch.toLowerCase()));
+          setPokemonList(searchPokemon);
+        } else {
+          //if search is a number we get the pokemon by id
+          const searchPokemon = pokemon.filter(res => res.entry_number.toString() == newSearch);
+          setPokemonList(searchPokemon);
+        }
+        setSearch(router.query.search as string);
+      } else if (!router.query.search) {
+        setSearch("");
+      }
     }
-  }, [router.query.page, router.isReady, page, pokemonList]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.page, router.query.search, router.isReady]);
 
   const handleSearchSubmit = () => {
     if (search.length > 0) {
@@ -71,11 +94,12 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
         const searchPokemon = pokemon.filter(res => res.entry_number.toString() == search);
         setPokemonList(searchPokemon);
       }
+      router.push(`?search=${search}&page=1`, undefined, { shallow: true });
     } else {
       setPokemonList(pokemon);
+      router.push(`?page=1`, undefined, { shallow: true });
     }
     setPage(1);
-    router.push(`?page=1`, undefined, { shallow: true });
   }
 
 
