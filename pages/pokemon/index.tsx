@@ -5,12 +5,13 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
 import { Pagination, Skeleton } from "@mui/material";
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 
 import styles from "../pokemon.module.css";
 import type { PokemonResult } from "../../type";
 import Head from "next/head";
 import HeaderPageHome from "../../components/headerHome";
+import Pokemon from "../../components/pokemon";
 
 export async function getStaticProps() {
   const { data } = await axios.get("https://pokeapi.co/api/v2/pokedex/1/");
@@ -25,10 +26,12 @@ export async function getStaticProps() {
 export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
 
   const [page, setPage] = useState(0);
+  const [key, setKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState<string>("");
   const [pokemonList, setPokemonList] = useState<PokemonResult[]>(pokemon);
   const [pokemonPaginate, setPokemonPaginate] = useState<PokemonResult[]>([]);
+  const [isAnimated, setIsAnimated] = useState(false);
 
   const router = useRouter();
   const rowSkeletons = Array.from({ length: 30 }, (_, i) => i);
@@ -39,8 +42,14 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
 
   useEffect(() => {
     if (pokemonList && page > 0) {
-      setPokemonPaginate(pokemonList.slice((page - 1) * 30, page * 30));
-      setLoading(false);
+      if (pokemonPaginate.length > 0) {
+        setKey(new Date().getTime());
+        setPokemonPaginate(pokemonList.slice((page - 1) * 30, page * 30));
+      } else {
+        setPokemonPaginate(pokemonList.slice((page - 1) * 30, page * 30));
+        setKey(new Date().getTime());
+        setLoading(false);
+      }
     }
   }, [pokemonList, page]);
 
@@ -58,17 +67,13 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
       if (isNaN(Number(search))) {
         const searchPokemon = pokemon.filter(res => res.pokemon_species.name.toLowerCase().includes(search.toLowerCase()));
         setPokemonList(searchPokemon);
-        setPokemonPaginate(searchPokemon.slice(0, 30));
       } else {
         //if search is a number we get the pokemon by id
         const searchPokemon = pokemon.filter(res => res.entry_number.toString() == search);
         setPokemonList(searchPokemon);
-        setPokemonPaginate(searchPokemon.slice(0, 30));
       }
     } else {
       setPokemonList(pokemon);
-      setPokemonPaginate(pokemon.slice(0, 30));
-
     }
     setPage(1);
     router.push(`?page=1`, undefined, { shallow: true });
@@ -117,39 +122,16 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
         setSearch={setSearch}
         handleSearchSubmit={handleSearchSubmit}
       />
-      {pokemonPaginate.length > 0 ? pokemonPaginate.map(({ entry_number, pokemon_species }) => (
-        <div key={entry_number} className={styles.card}>
-          <Link href={`/pokemon_entries/${entry_number}`}>
-            <a className={styles.inside_card}>
-              <motion.div
-                animate={{
-                  scale: [0.1, 1, 1],
-                  filter: ["grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8)", "grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8)", ""]
-                }}
-                transition={{
-                  duration: 1,
-                  ease: "easeInOut",
-                  times: [0.1, 0.8, 1],
-                }}
-                className={styles.inside_card}>
-                <Image src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry_number}.png`}
-                  alt={pokemon_species.name}
-                  width={"100%"}
-                  height={"100%"}
-                  loading={"lazy"}
-                />
-              </motion.div>
-              <p>{pokemon_species.name}</p>
-            </a>
-          </Link>
-        </div>
+
+      {pokemonPaginate.length > 0 ? pokemonPaginate.map(({ entry_number, pokemon_species }, index) => (
+        <Pokemon entry_number={entry_number} pokemon_species={pokemon_species} keyValue={key} key={index} />
       )) :
-        <h3 style={{
+        (!isAnimated && <h3 style={{
           textAlign: "center",
           marginTop: "20px",
           marginBottom: "20px",
           gridColumn: "1 / -1"
-        }}>No results</h3>}
+        }}>No results</h3>)}
       <Pagination
         count={Math.floor(pokemonList.length / 30) + 1}
         variant="outlined"
