@@ -31,7 +31,6 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
   const [search, setSearch] = useState<string>("");
   const [pokemonList, setPokemonList] = useState<PokemonResult[]>(pokemon);
   const [pokemonPaginate, setPokemonPaginate] = useState<PokemonResult[]>([]);
-  const [isAnimated, setIsAnimated] = useState(false);
 
   const router = useRouter();
   const rowSkeletons = Array.from({ length: 30 }, (_, i) => i);
@@ -126,12 +125,12 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
       {pokemonPaginate.length > 0 ? pokemonPaginate.map(({ entry_number, pokemon_species }, index) => (
         <Pokemon entry_number={entry_number} pokemon_species={pokemon_species} keyValue={key} key={index} />
       )) :
-        (!isAnimated && <h3 style={{
+        <h3 style={{
           textAlign: "center",
           marginTop: "20px",
           marginBottom: "20px",
           gridColumn: "1 / -1"
-        }}>No results</h3>)}
+        }}>No results</h3>}
       <Pagination
         count={Math.floor(pokemonList.length / 30) + 1}
         variant="outlined"
