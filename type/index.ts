@@ -10,7 +10,7 @@ type Pokemon = {
     base_happiness: number;
     capture_rate: number;
     color: {
-        name: string,
+        name: string;
         url: string
     };
     egg_groups: Array<{
@@ -23,13 +23,13 @@ type Pokemon = {
     evolves_from_species: {
         name: string;
         url: string;
-    },
+    };
     flavor_text_entries: Array<{
         flavor_text: string;
         language: {
             name: string;
             url: string;
-        },
+        };
         version: {
             name: string;
             url: string;
@@ -48,15 +48,15 @@ type Pokemon = {
     generation: {
         name: string;
         url: string;
-    },
+    };
     growth_rate: {
         name: string;
         url: string;
-    },
+    };
     habitat: {
         name: string;
         url: string;
-    },
+    };
     has_gender_differences: boolean;
     hatch_counter: number;
     id: number;
@@ -76,7 +76,7 @@ type Pokemon = {
         area: {
             name: string;
             url: string;
-        },
+        };
         base_score: number;
         rate: number;
     }>;
@@ -90,7 +90,7 @@ type Pokemon = {
     shape: {
         name: string;
         url: string;
-    },
+    };
     varieties: Array<{
         is_default: boolean;
         pokemon: {
@@ -102,32 +102,33 @@ type Pokemon = {
 
 type PokemonDetails = {
     sprites: {
-        front_default: string,
-        front_shiny: string,
-        front_female: string,
-        front_shiny_female: string,
-        back_default: string,
-        back_shiny: string,
-        back_female: string,
-        back_shiny_female: string,
-    },
-    weight: string,
-    height: string
+        front_default: string;
+        front_shiny: string;
+        front_female: string;
+        front_shiny_female: string;
+        back_default: string;
+        back_shiny: string;
+        back_female: string;
+        back_shiny_female: string;
+    };
+    weight: string;
+    height: string;
+    name: string;
 }
 
 type ApiResponse = {
     data: { pokemon_entries: PokemonResult[] }
 }
 
-type getStaticProps = {
+type GetStaticProps = {
     params: {
-        id: number;
+        id: string;
     }
 }
 
 type HeaderHome = {
-    search: string,
-    setSearch: (value: string) => void,
+    search: string;
+    setSearch: (value: string) => void;
     handleSearchSubmit: () => void
 }
 
@@ -135,7 +136,7 @@ export type {
     Pokemon,
     PokemonResult,
     ApiResponse,
-    getStaticProps,
+    GetStaticProps,
     PokemonDetails,
     HeaderHome
 }
