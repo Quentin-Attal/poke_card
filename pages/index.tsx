@@ -1,4 +1,4 @@
-import utilStyles from "./index.module.css";
+import utilStyles from "../styles/index.module.css";
 
 import { getPostData } from "../lib/markdown";
 import Header from "../components/header";

@@ -1,13 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/router";
 
-import Link from "next/link";
 import axios from "axios";
 import { Pagination, Skeleton } from "@mui/material";
-import { AnimatePresence, motion } from "framer-motion"
 
-import styles from "../pokemon.module.css";
+import styles from "../../styles/pokemon.module.css";
 import type { PokemonResult } from "../../type";
 import Head from "next/head";
 import HeaderPageHome from "../../components/headerHome";

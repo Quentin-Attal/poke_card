@@ -2,7 +2,7 @@ import Link from "next/link"
 import type { PokemonResult } from "../type"
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion"
-import styles from "../pages/pokemon.module.css";
+import styles from "../styles/pokemon.module.css";
 
 type Pokemon = PokemonResult & {
     keyValue: number
@@ -10,7 +10,7 @@ type Pokemon = PokemonResult & {
 
 const Pokemon = ({ entry_number, pokemon_species, keyValue }: Pokemon) => (
     <div className={styles.card}>
-        <Link href={`/pokemon_entries/${entry_number}`}>
+        <Link href={`/pokemon/${entry_number}`}>
             <a className={styles.inside_card}>
                 <div className={styles.inside_card}>
                     <AnimatePresence>
