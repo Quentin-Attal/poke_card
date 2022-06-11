@@ -5,17 +5,17 @@ import axios from "axios";
 import { Pagination, Skeleton } from "@mui/material";
 
 import styles from "../../styles/pokemon.module.css";
-import type { PokemonResult } from "../../type";
+import type { ApiResponse, PokemonResult } from "../../type";
 import Head from "next/head";
 import HeaderPageHome from "../../components/headerHome";
 import Pokemon from "../../components/pokemon";
 
 export async function getStaticProps() {
-  const { data } = await axios.get("https://pokeapi.co/api/v2/pokedex/1/");
+  const { data }: ApiResponse = await axios.get("https://pokeapi.co/api/v2/pokemon?limit=1200");
 
   return {
     props: {
-      pokemon: data.pokemon_entries
+      pokemon: data.results
     }
   };
 }
@@ -42,14 +42,9 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
 
   useEffect(() => {
     if (pokemonList && page > 0) {
-      if (pokemonPaginate.length > 0) {
-        setKey(new Date().getTime());
-        setPokemonPaginate(pokemonList.slice((page - 1) * 30, page * 30));
-      } else {
-        setPokemonPaginate(pokemonList.slice((page - 1) * 30, page * 30));
-        setKey(new Date().getTime());
-        setLoading(false);
-      }
+      setPokemonPaginate(pokemonList.slice((page - 1) * 30, page * 30));
+      setKey(new Date().getTime());
+      setLoading(false);
     }
   }, [pokemonList, page]);
 
@@ -61,16 +56,9 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
         setPage(1);
       }
       if (router.query.search && search !== router.query.search) {
-        //check if search is not a number
         const newSearch = router.query.search as string;
-        if (isNaN(Number(newSearch))) {
-          const searchPokemon = pokemon.filter(res => res.pokemon_species.name.toLowerCase().includes(newSearch.toLowerCase()));
-          setPokemonList(searchPokemon);
-        } else {
-          //if search is a number we get the pokemon by id
-          const searchPokemon = pokemon.filter(res => res.entry_number.toString() == newSearch);
-          setPokemonList(searchPokemon);
-        }
+        const searchPokemon = pokemon.filter(res => res.name.toLowerCase().includes(newSearch.toLowerCase()));
+        setPokemonList(searchPokemon);
         setSearch(router.query.search as string);
       } else if (!router.query.search) {
         setSearch("");
@@ -82,15 +70,8 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
 
   const handleSearchSubmit = () => {
     if (search.length > 0) {
-      //check if search is not a number
-      if (isNaN(Number(search))) {
-        const searchPokemon = pokemon.filter(res => res.pokemon_species.name.toLowerCase().includes(search.toLowerCase()));
-        setPokemonList(searchPokemon);
-      } else {
-        //if search is a number we get the pokemon by id
-        const searchPokemon = pokemon.filter(res => res.entry_number.toString() == search);
-        setPokemonList(searchPokemon);
-      }
+      const searchPokemon = pokemon.filter(res => res.name.toLowerCase().includes(search.toLowerCase()));
+      setPokemonList(searchPokemon);
       router.push(`?search=${search}&page=1`, undefined, { shallow: true });
     } else {
       setPokemonList(pokemon);
@@ -143,8 +124,12 @@ export default function Home({ pokemon }: { pokemon: PokemonResult[] }) {
         handleSearchSubmit={handleSearchSubmit}
       />
 
-      {pokemonPaginate.length > 0 ? pokemonPaginate.map(({ entry_number, pokemon_species }, index) => (
-        <Pokemon entry_number={entry_number} pokemon_species={pokemon_species} keyValue={key} key={index} />
+      {pokemonPaginate.length > 0 ? pokemonPaginate.map(({ name, url }, index) => (
+        <Pokemon
+          entry_number={parseInt(url.split("/")[6])}
+          name={name}
+          keyValue={key}
+          key={index} />
       )) :
         <h3 style={{
           textAlign: "center",

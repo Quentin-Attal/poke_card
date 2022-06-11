@@ -1,6 +1,6 @@
-import { Pokemon, PokemonDetails } from "../type";
+import type { Pokemon, PokemonSpecies } from "../type";
 
-const pokemonInit: Pokemon = {
+const pokemonSpeciesInit: PokemonSpecies = {
     base_happiness: 0,
     capture_rate: 0,
     color: {
@@ -50,7 +50,7 @@ const pokemonInit: Pokemon = {
     varieties: []
 };
 
-const pokemonDetailsInit: PokemonDetails = {
+const pokemonInit: Pokemon = {
     sprites: {
         front_default: "",
         back_default: "",
@@ -63,10 +63,15 @@ const pokemonDetailsInit: PokemonDetails = {
     },
     height: "0",
     weight: "0",
-    name: ""
+    name: "",
+    species: {
+        name: "",
+        url: ""
+    },
+    id: 0
 };
 
 export {
     pokemonInit,
-    pokemonDetailsInit
+    pokemonSpeciesInit
 }

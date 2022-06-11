@@ -3,7 +3,6 @@ import utilStyles from "../styles/index.module.css";
 import { getPostData } from "../lib/markdown";
 import Header from "../components/header";
 
-
 export async function getStaticProps() {
     const postData = await getPostData("home");
 

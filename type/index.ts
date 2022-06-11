@@ -1,12 +1,9 @@
 type PokemonResult = {
-    entry_number: number;
-    pokemon_species: {
-        name: string;
-        url: string;
-    }
+    name: string;
+    url: string;
 }
 
-type Pokemon = {
+type PokemonSpecies = {
     base_happiness: number;
     capture_rate: number;
     color: {
@@ -100,7 +97,11 @@ type Pokemon = {
     }>;
 }
 
-type PokemonDetails = {
+type Pokemon = {
+    species: {
+        name: string;
+        url: string;
+    }
     sprites: {
         front_default: string;
         front_shiny: string;
@@ -114,10 +115,16 @@ type PokemonDetails = {
     weight: string;
     height: string;
     name: string;
+    id: number;
 }
 
 type ApiResponse = {
-    data: { pokemon_entries: PokemonResult[] }
+    data: {
+        results: PokemonResult[];
+        count: number;
+        next: string;
+        previous: string;
+    }
 }
 
 type GetStaticProps = {
@@ -137,6 +144,6 @@ export type {
     PokemonResult,
     ApiResponse,
     GetStaticProps,
-    PokemonDetails,
+    PokemonSpecies,
     HeaderHome
 }

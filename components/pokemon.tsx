@@ -1,15 +1,23 @@
 import Link from "next/link"
-import type { PokemonResult } from "../type"
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion"
 import styles from "../styles/pokemon.module.css";
+import { useState } from "react";
+import { getPokemonData } from "../pages/pokemon/[id]";
+import type { Pokemon as PokemonType } from "../type";
 
-type Pokemon = PokemonResult & {
-    keyValue: number
+type PokemonComponent = {
+    keyValue: number,
+    entry_number: number,
+    name: string
 }
 
-const Pokemon = ({ entry_number, pokemon_species, keyValue }: Pokemon) => (
-    <div className={styles.card}>
+const Pokemon = ({ entry_number, name, keyValue }: PokemonComponent) => {
+    const [imageError, setImageError] = useState(false);
+    const [fallback, setFallback] = useState("");
+    const src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry_number}.png`
+
+    return <div className={styles.card}>
         <Link href={`/pokemon/${entry_number}`}>
             <a className={styles.inside_card}>
                 <div className={styles.inside_card}>
@@ -33,19 +41,27 @@ const Pokemon = ({ entry_number, pokemon_species, keyValue }: Pokemon) => (
                                 filter: ["", "grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8)", "grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8)"],
                             }}
                             className={styles.inside_card}>
-                            <Image src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry_number}.png`}
-                                alt={pokemon_species.name}
+                            <Image src={imageError ? fallback : src}
+                                alt={name}
                                 width={"100%"}
                                 height={"100%"}
                                 loading={"lazy"}
+                                onError={() => {
+                                    const url = `https://pokeapi.co/api/v2/pokemon/${entry_number}`;
+                                    const pokemonDetail = getPokemonData(url) as Promise<PokemonType>;
+                                    pokemonDetail.then(res => {
+                                        setFallback(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${res.species.url.split('/')[6]}.png`);
+                                        setImageError(true);
+                                    })
+                                }}
                             />
                         </motion.div>
                     </AnimatePresence>
                 </div>
-                <p>{pokemon_species.name}</p>
+                <p>{name}</p>
             </a>
         </Link>
     </div>
-)
+}
 
 export default Pokemon;
