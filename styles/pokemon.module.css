@@ -36,6 +36,12 @@
     position: relative;
 }
 
+@media (max-width: 800px) {
+    .root {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media screen and (max-width: 600px) {
     .card {
         width: 200px;
@@ -45,8 +51,24 @@
     .root {
         display: grid;
         width: 100%;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         grid-gap: 1rem;
         align-items: center;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .card {
+        width: 80vw;
+        height: 80vw;
+    }
+
+    .root {
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(1, 1fr);
+        grid-gap: 1rem;
+        align-items: center;
+        justify-items: center;
     }
 }

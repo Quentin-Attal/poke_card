@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./layout.module.css";
 
 const defaultName = "Pokedex";
@@ -18,13 +19,17 @@ export default function Header({ children, name }: { children: React.ReactNode; 
                 <meta name="twitter:card" content="summary_large_image" />
             </Head>
             <header className={styles.header}>
-                <Image
-                    priority
-                    src="/images/rotom.jpg"
-                    height={108}
-                    width={300}
-                    alt={name}
-                />
+                <Link href="/">
+                    <a>
+                        <Image
+                            priority
+                            src="/images/rotom.jpg"
+                            height={108}
+                            width={300}
+                            alt={name}
+                        />
+                    </a>
+                </Link>
             </header >
             <main>{children}</main>
         </div >

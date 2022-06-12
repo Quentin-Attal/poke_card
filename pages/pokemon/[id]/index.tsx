@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@mui/material";
 
 import type { ApiResponse, FlipAnimation, GetStaticProps, Pokemon, PokemonSpecies } from "../../../type";
@@ -37,7 +37,16 @@ export async function getStaticProps({ params }: GetStaticProps) {
 
     const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
 
-    const pokemon = await getPokemonData(url);
+    const pokemonData = await getPokemonData(url) as Pokemon;
+
+    const pokemon: Pokemon = {
+        height: pokemonData.height,
+        name: pokemonData.name,
+        weight: pokemonData.weight,
+        sprites: pokemonData.sprites,
+        species: pokemonData.species,
+        id: pokemonData.id,
+    }
 
     return {
         props: {
@@ -83,6 +92,10 @@ const flipAnimation: FlipAnimation = {
     }
 }
 
+// regex for remove some wrong caracters 
+// eslint-disable-next-line
+const regex = new RegExp("\\n|");
+
 export default function Card({ id, pokemon }: { id: number, pokemon: Pokemon }) {
 
     const language = "en";
@@ -91,8 +104,10 @@ export default function Card({ id, pokemon }: { id: number, pokemon: Pokemon }) 
     const [pokemonNext, setPokemonNext] = useState<Pokemon>(pokemonInit);
     const [pokemonPrev, setPokemonPrev] = useState<Pokemon>(pokemonInit);
     const [isFront, setIsFront] = useState(true);
+    const [versionName, setVersionName] = useState("");
 
     const flavor_text = pokemonDetails.flavor_text_entries.filter(res => res.language.name === language);
+
     const default_image = isFront ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonDetails.id}.png` : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${pokemonDetails.id}.png`;
 
     useEffect(() => {
@@ -130,6 +145,7 @@ export default function Card({ id, pokemon }: { id: number, pokemon: Pokemon }) 
 
             pokemonDetail.then(res => {
                 setPokemonDetails(res);
+                setVersionName(res.flavor_text_entries.find(res => res.language.name === language)?.version.name || "");
             })
         }
 
@@ -139,10 +155,18 @@ export default function Card({ id, pokemon }: { id: number, pokemon: Pokemon }) 
     return (
         <>
             <Head>
-                <title>{pokemon.name}</title>
+                <title>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</title>
             </Head>
             <main className={pokemonStyle.main}>
-                <h1 className={pokemonStyle.title}>{pokemon.name}</h1>
+
+                <h1 className={pokemonStyle.title}>
+                    <Link href="/pokemon">
+                        <a>
+                            <ArrowLeftTwoToneIcon style={{ fontSize: "40px" }} />
+                        </a>
+                    </Link>
+                    {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+                </h1>
                 <nav className={pokemonStyle.navigate}>
                     <div>
                         {!!pokemonPrev.id && <div className={pokemonStyle.pokemonDetails}>
@@ -263,20 +287,58 @@ export default function Card({ id, pokemon }: { id: number, pokemon: Pokemon }) 
                         <FlipCameraAndroidIcon />
                     </Button>
                 </div>
-                {flavor_text.map((res, index) => (<div key={"flavor_" + index}>
-                    <h3>{res.version.name}</h3>
-                    <p>{res.flavor_text}</p>
-                </div>))}
-                <p>
-                    {pokemonDetails.evolves_from_species ? pokemonDetails.evolves_from_species.name : "No Evolution"}
-                </p>
-                <h2>
-                    Species: {pokemonDetails.genera.find(res => res.language.name === language)?.genus}
-                </h2>
-                <p>
-                    weight: {pokemon.weight}
-                    height: {pokemon.height}
-                </p>
+                <div style={{
+                    marginTop: "3rem",
+                }}>
+                    <h2 style={{
+                        fontSize: "1.75rem"
+                    }}>
+                        Description
+                    </h2>
+                    <div className={pokemonStyle.version_header}>
+                        {flavor_text.map((res, index) => (<div key={"flavor_" + index}>
+                            <button onClick={() => setVersionName(res.version.name)}>
+                                <p className={`${pokemonStyle.version_header__text} ${versionName == res.version.name && pokemonStyle.active}`}>{res.version.name}</p>
+                            </button>
+                        </div>))}
+                    </div>
+                    {!!versionName && <div className={pokemonStyle.version_description}>
+                        <p>{flavor_text.find(res => res.version.name === versionName)?.flavor_text.replace(regex, " ") || ""}</p>
+                    </div>}
+                </div>
+                <div style={{
+                    marginTop: "1rem",
+                }}>
+                    <h3 style={{
+                        fontSize: "1.75rem"
+                    }}>
+                        Species
+                    </h3>
+                    <p style={{
+                        fontSize: "1.5rem",
+                        marginTop: "1rem",
+                    }}>
+                        {pokemonDetails.genera.find(res => res.language.name === language)?.genus}
+                    </p>
+                </div>
+                <div style={{
+                    marginTop: "1rem",
+                }}>
+                    <h3 style={{
+                        fontSize: "1.75rem"
+                    }}>
+                        Size and weight
+                    </h3>
+                    <div style={{
+                        marginTop: "1rem",
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                    }}>
+
+                        <p style={{ textAlign: "center", fontSize: "1.5rem" }}>weight: {pokemon.weight}</p>
+                        <p style={{ textAlign: "center", fontSize: "1.5rem" }}>height: {pokemon.height}</p>
+                    </div>
+                </div>
             </main>
         </>
     );
