@@ -10,11 +10,11 @@
         "label": "home",
         "requireSameDimensions": true,
         "misMatchThreshold": 0.1,
-        "url": "http://localhost:3000/",
-        "referenceUrl": "http://localhost:3000/",
+        "url": "https://poke-card-six.vercel.app/",
+        "referenceUrl": "https://poke-card-six.vercel.app/",
         "expect": 0,
         "viewportLabel": "phone",
-        "engineErrorMsg": "net::ERR_CONNECTION_REFUSED at http://localhost:3000/",
+        "engineErrorMsg": "net::ERR_CONNECTION_REFUSED at https://poke-card-six.vercel.app/",
         "error": "Reference file not found C:\\Users\\enfer\\Desktop\\frontEnd\\poke_card\\backstop_data\\bitmaps_reference\\backstop_default_home_0__0_phone.png"
       },
       "status": "fail"
@@ -28,11 +28,11 @@
         "label": "home",
         "requireSameDimensions": true,
         "misMatchThreshold": 0.1,
-        "url": "http://localhost:3000/",
-        "referenceUrl": "http://localhost:3000/",
+        "url": "https://poke-card-six.vercel.app/",
+        "referenceUrl": "https://poke-card-six.vercel.app/",
         "expect": 0,
         "viewportLabel": "tablet",
-        "engineErrorMsg": "net::ERR_CONNECTION_REFUSED at http://localhost:3000/",
+        "engineErrorMsg": "net::ERR_CONNECTION_REFUSED at https://poke-card-six.vercel.app/",
         "error": "Reference file not found C:\\Users\\enfer\\Desktop\\frontEnd\\poke_card\\backstop_data\\bitmaps_reference\\backstop_default_home_0__1_tablet.png"
       },
       "status": "fail"

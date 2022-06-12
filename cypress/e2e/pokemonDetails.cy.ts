@@ -1,5 +1,5 @@
 describe('use link', () => {
     it('passes', () => {
-        cy.visit('http://localhost:3000/pokemon/2');
+        cy.visit('https://poke-card-six.vercel.app/pokemon/2');
     })
 })

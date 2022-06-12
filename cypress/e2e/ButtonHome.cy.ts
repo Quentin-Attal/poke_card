@@ -1,16 +1,16 @@
 describe('use link', () => {
     it('passes', () => {
-        cy.visit('http://localhost:3000/');
+        cy.visit('https://poke-card-six.vercel.app/');
         cy.get('#cgu').click();
-        cy.url().should('eq', 'http://localhost:3000/cgu');
+        cy.url().should('eq', 'https://poke-card-six.vercel.app/cgu');
         cy.get('#contact').click();
-        cy.url().should('eq', 'http://localhost:3000/contact');
+        cy.url().should('eq', 'https://poke-card-six.vercel.app/contact');
         cy.get('#home').click();
-        cy.url().should('eq', 'http://localhost:3000/');
+        cy.url().should('eq', 'https://poke-card-six.vercel.app/');
     })
     it('passes', () => {
-        cy.visit('http://localhost:3000/');
+        cy.visit('https://poke-card-six.vercel.app/');
         cy.contains('Go to the pokemon page').click();
-        cy.url().should('eq', 'http://localhost:3000/pokemon');
+        cy.url().should('eq', 'https://poke-card-six.vercel.app/pokemon');
     })
 })

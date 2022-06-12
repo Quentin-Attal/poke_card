@@ -15,4 +15,4 @@ Each pokemon has a link to its details' page, where you can see all information 
 
 On the pokemon page you can see the pokemon's name, its number, its type, its evolution, its image, its description and its evolutions.
 
-[Go to the pokemon page](http://localhost:3000/pokemon)
+[Go to the pokemon page](https://poke-card-six.vercel.app/pokemon)

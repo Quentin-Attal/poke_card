@@ -10,8 +10,8 @@
         "label": "home",
         "requireSameDimensions": true,
         "misMatchThreshold": 0.1,
-        "url": "http://localhost:3000/",
-        "referenceUrl": "http://localhost:3000/",
+        "url": "https://poke-card-six.vercel.app/",
+        "referenceUrl": "https://poke-card-six.vercel.app/",
         "expect": 0,
         "viewportLabel": "phone",
         "diff": {
@@ -34,8 +34,8 @@
         "label": "home",
         "requireSameDimensions": true,
         "misMatchThreshold": 0.1,
-        "url": "http://localhost:3000/",
-        "referenceUrl": "http://localhost:3000/",
+        "url": "https://poke-card-six.vercel.app/",
+        "referenceUrl": "https://poke-card-six.vercel.app/",
         "expect": 0,
         "viewportLabel": "tablet",
         "diff": {
@@ -58,8 +58,8 @@
         "label": "home",
         "requireSameDimensions": true,
         "misMatchThreshold": 0.1,
-        "url": "http://localhost:3000/",
-        "referenceUrl": "http://localhost:3000/",
+        "url": "https://poke-card-six.vercel.app/",
+        "referenceUrl": "https://poke-card-six.vercel.app/",
         "expect": 0,
         "viewportLabel": "desktop",
         "diff": {

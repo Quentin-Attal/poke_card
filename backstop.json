@@ -23,8 +23,8 @@
     {
       "label": "home",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://localhost:3000/",
-      "referenceUrl": "http://localhost:3000/",
+      "url": "https://poke-card-six.vercel.app/",
+      "referenceUrl": "https://poke-card-six.vercel.app/",
       "readyEvent": "",
       "readySelector": "",
       "delay": 0,
@@ -41,27 +41,27 @@
     },{
       "label": "cgu",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://localhost:3000/cgu",
-      "referenceUrl": "http://localhost:3000/cgu"
+      "url": "https://poke-card-six.vercel.app/cgu",
+      "referenceUrl": "https://poke-card-six.vercel.app/cgu"
     },
     {
       "label": "contact",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://localhost:3000/contact",
-      "referenceUrl": "http://localhost:3000/contact"
+      "url": "https://poke-card-six.vercel.app/contact",
+      "referenceUrl": "https://poke-card-six.vercel.app/contact"
     },
     {
       "label": "pokemon",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://localhost:3000/pokemon",
-      "referenceUrl": "http://localhost:3000/pokemon",
+      "url": "https://poke-card-six.vercel.app/pokemon",
+      "referenceUrl": "https://poke-card-six.vercel.app/pokemon",
       "delay": 4000
     },
     {
       "label": "pokemon details",
       "cookiePath": "backstop_data/engine_scripts/cookies.json",
-      "url": "http://localhost:3000/pokemon/1",
-      "referenceUrl": "http://localhost:3000/pokemon/1",
+      "url": "https://poke-card-six.vercel.app/pokemon/1",
+      "referenceUrl": "https://poke-card-six.vercel.app/pokemon/1",
       "delay": 1000
     }
 
