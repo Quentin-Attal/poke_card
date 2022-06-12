@@ -118,6 +118,42 @@ type Pokemon = {
     id: number;
 }
 
+type FlipAnimation = {
+    initial: {
+        position: "absolute" | "relative" | undefined;
+        opacity: number;
+        transform: string;
+    },
+    animate: {
+        opacity: number;
+        transform: string;
+        perspective: number;
+        transition: {
+            duration: number;
+            ease: string;
+            flip: {
+                direction: string;
+                duration: number;
+                ease: string;
+            },
+        },
+    },
+    exit: {
+        opacity: number;
+        transform: string;
+        perspective: number;
+        transition: {
+            duration: number;
+            ease: string;
+            flip: {
+                direction: string;
+                duration: number;
+                ease: string;
+            },
+        },
+    }
+}
+
 type ApiResponse = {
     data: {
         results: PokemonResult[];
@@ -145,5 +181,6 @@ export type {
     ApiResponse,
     GetStaticProps,
     PokemonSpecies,
-    HeaderHome
+    HeaderHome,
+    FlipAnimation
 }
