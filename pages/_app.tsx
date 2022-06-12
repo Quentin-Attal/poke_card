@@ -34,13 +34,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         marginBottom: '1rem',
       }}>
         <Link href="/">
-          <a>Home</a>
+          <a id="home">Home</a>
         </Link>
         <Link href="/cgu">
-          <a>About</a>
+          <a id="cgu">About</a>
         </Link>
         <Link href="/contact">
-          <a>Contact</a>
+          <a id="contact">Contact</a>
         </Link>
       </p>
     </footer>

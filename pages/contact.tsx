@@ -89,7 +89,7 @@ const Contact = () => {
                     marginBottom: "1rem",
                     fontSize: "1.25rem",
                 }}
-                    size={"large"} type="submit" disabled={state.submitting}>
+                    size={"large"} type="submit" id="submit" disabled={state.submitting}>
                     Submit
                 </Button>
             </form>
